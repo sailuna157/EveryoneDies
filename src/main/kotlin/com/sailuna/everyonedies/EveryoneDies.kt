@@ -8,9 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin
 class EveryoneDies: JavaPlugin() {
 	@Suppress("UnstableApiUsage")
 	override fun onEnable() {
+		// コマンドを登録
 		lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS) { commands ->
 			commands.registrar().register(CommandHandler.createCommand(this))
 		}
+		// イベントリスナーを登録
 		server.pluginManager.registerEvents(PlayerDeathListener, this)
 	}
 
