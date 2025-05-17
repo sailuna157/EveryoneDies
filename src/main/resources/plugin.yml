@@ -1,0 +1,4 @@
+name: EveryoneDies
+main: com.sailuna.everyonedies.EveryoneDies
+version: ${version}
+api-version: 1.21

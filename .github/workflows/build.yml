@@ -1,0 +1,48 @@
+name: Build with gradle
+on:
+  push:
+    tags:
+      - v*.*
+      - v*.*.*
+    branches:
+      - main
+  release:
+    types:
+      - prereleased
+      - released
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        java: [ 21 ]
+    steps:
+      - name: Fetch sources
+        uses: actions/checkout@v4
+      - name: Caching gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Setup java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: corretto
+          cache: gradle
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+      - name: Release jar
+        uses: softprops/action-gh-release@v2
+        if: github.event_name == 'release' && github.ref_type == 'tag'
+        with:
+          files: |
+            build/libs/*.jar
