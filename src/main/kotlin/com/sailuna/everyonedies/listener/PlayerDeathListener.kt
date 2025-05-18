@@ -18,11 +18,11 @@ object PlayerDeathListener: Listener {
 		Bukkit.getOnlinePlayers()
 			.filter { player ->
 				// 死んだプレイヤーを除くゲームモードがサバイバルのプレイヤーをフィルタリング
-			player != deathPlayer && player.gameMode == GameMode.SURVIVAL
+				player != deathPlayer && player.gameMode == GameMode.SURVIVAL
 			}
 			.forEach { player ->
 				// プレイヤーを死亡させる
-			player.health = 0.0
+				player.health = 0.0
 			}
 	}
 }
